@@ -3,7 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-P00D0CMNZ9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-P00D0CMNZ9');
+</script>
     <title>Devine le nombre</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,19 +24,43 @@
     <ul>
       <li>Le nombre est entre 1 et 100.</li>
       <li>Nombre illimité d'essais.</li>
+      <div class="progress-bar-container">
+  <div id="progressBar"></div>
+</div>
+
       <li>Indice après chaque tentative.</li>
     </ul>
 
     <label for="guessInput">Entrez votre nombre :</label>       
-    <input type="number" id="guessInput" min="1" max="100" placeholder="Ex: 42">
+<input type="text"
+       inputmode="decimal"
+       pattern="[0-9]*"
+       id="guessInput"
+       placeholder="Ex: 42"
+       autocomplete="off"
+       autocorrect="off"
+       spellcheck="false"
+       enterkeyhint="go"
+>
+
     <button id="guessButton">🔍 Deviner</button>
 
     <p id="result"></p>
     <p id="attempts"></p>
     <button id="resetButton" style="display:none;">🔁 Recommencer</button>
+
+    <div class="stats">
+  <h3>📊 Tes stats</h3>
+  <p id="gamesPlayed"></p>
+  <p id="averageAttempts"></p>
+  <p id="bestScore"></p>
+</div>
+
   </section>
 
-  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="script.js"></script>
+
 </body>
 
 

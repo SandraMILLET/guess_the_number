@@ -13,9 +13,11 @@ const guessButton = document.getElementById("guessButton");
 const result = document.getElementById("result");
 const attempts = document.getElementById("attempts");
 const resetButton = document.getElementById("resetButton");
+const progressBar = document.getElementById("progressBar");
 
 let numberToGuess = Math.floor(Math.random() * 100) + 1;
 let tryCount = 0;
+const maxVisualTries = 20;
 
 function resetGame() {
   numberToGuess = Math.floor(Math.random() * 100) + 1;
@@ -27,25 +29,71 @@ function resetGame() {
   resetButton.style.display = "none";
   guessButton.disabled = false;
   guessInput.disabled = false;
+  progressBar.style.width = "0%";
   guessInput.focus();
 }
+function updateStats(currentTries) {
+  let games = Number(localStorage.getItem('games') || 0);
+  let totalTries = Number(localStorage.getItem('totalTries') || 0);
+  let bestScore = Number(localStorage.getItem('bestScore') || 0);
 
-guessButton.addEventListener("click", () => {
+  games += 1;
+  totalTries += currentTries;
+  if (bestScore === 0 || currentTries < bestScore) {
+    bestScore = currentTries;
+  }
+
+  localStorage.setItem('games', games);
+  localStorage.setItem('totalTries', totalTries);
+  localStorage.setItem('bestScore', bestScore);
+
+  const avg = (totalTries / games).toFixed(1);
+  document.getElementById('gamesPlayed').textContent = `Parties jouées : ${games}`;
+  document.getElementById('averageAttempts').textContent = `Moyenne de tentatives : ${avg}`;
+  document.getElementById('bestScore').textContent = `Meilleur score : ${bestScore} tentative(s)`;
+}
+
+function showStatsOnLoad() {
+  const games = localStorage.getItem('games');
+  if (games) {
+    updateStats(0); // pour forcer l'affichage même sans victoire
+  }
+}
+
+function launchConfetti() {
+  if (typeof confetti === "function") {
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+  } else {
+    console.warn("Confetti non chargé !");
+  }
+}
+
+function makeGuess() {
   const userGuess = Number(guessInput.value);
 
   if (userGuess < 1 || userGuess > 100 || isNaN(userGuess)) {
-    result.textContent = "Veuillez entrer un nombre entre 1 et 100.";
+    result.textContent = "❌ Entrez un nombre entre 1 et 100.";
     result.className = "error";
     return;
   }
 
   tryCount++;
+  const percentage = Math.min((tryCount / maxVisualTries) * 100, 100);
+  progressBar.style.width = `${percentage}%`;
+
   if (userGuess === numberToGuess) {
     result.textContent = `🎉 Bravo ! Le nombre était ${numberToGuess}.`;
     result.className = "success";
     guessButton.disabled = true;
     guessInput.disabled = true;
     resetButton.style.display = "inline-block";
+    launchConfetti();
+updateStats(tryCount);
+
   } else {
     result.textContent = userGuess < numberToGuess ? "🔼 Trop petit !" : "🔽 Trop grand !";
     result.className = "error";
@@ -54,11 +102,17 @@ guessButton.addEventListener("click", () => {
   attempts.textContent = `Essais : ${tryCount}`;
   guessInput.focus();
   guessInput.select();
-});
+}
 
+guessButton.addEventListener("click", makeGuess);
 resetButton.addEventListener("click", resetGame);
-
+guessInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    makeGuess();
+  }
+});
 window.addEventListener("load", () => {
   guessInput.focus();
 });
+showStatsOnLoad();
 
