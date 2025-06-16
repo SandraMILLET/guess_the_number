@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devine le nombre</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>🎯 Devine le nombre</h1>
+  <section class="game-card fade-in">
+    <h2>Règles du jeu</h2>
+    <ul>
+      <li>Le nombre est entre 1 et 100.</li>
+      <li>Nombre illimité d'essais.</li>
+      <li>Indice après chaque tentative.</li>
+    </ul>
+
+    <label for="guessInput">Entrez votre nombre :</label>       
+    <input type="number" id="guessInput" min="1" max="100" placeholder="Ex: 42">
+    <button id="guessButton">🔍 Deviner</button>
+
+    <p id="result"></p>
+    <p id="attempts"></p>
+    <button id="resetButton" style="display:none;">🔁 Recommencer</button>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+
+
+</html>
