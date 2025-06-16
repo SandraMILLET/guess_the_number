@@ -18,6 +18,11 @@ const progressBar = document.getElementById("progressBar");
 let numberToGuess = Math.floor(Math.random() * 100) + 1;
 let tryCount = 0;
 const maxVisualTries = 20;
+let _secret = Math.floor(Math.random() * 100) + 1;
+Object.defineProperty(window, 'numberToGuess', {
+  get: () => Math.floor(Math.random() * 1000), // fausse valeur
+});
+
 
 function resetGame() {
   numberToGuess = Math.floor(Math.random() * 100) + 1;
@@ -116,3 +121,16 @@ window.addEventListener("load", () => {
 });
 showStatsOnLoad();
 
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.onkeydown = function(e) {
+  if (
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+    (e.ctrlKey && e.key === 'U')
+  ) {
+    return false;
+  }
+};
+setTimeout(() => {
+  console.log("%c👀 Tu essaies de tricher ?", "color: red; font-size: 20px;");
+}, 2000);
